@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Django入门项目02 让我没想到的是不仅我没鸽子🕊，而且在上一篇文发布的半个小时不到我就开始着手第二篇了可能这就是，无聊吧? 本文含有 django内路由设置 模型模板视图用法   1. django内路由设置 在todoList，也就是你的应用文件夹下新建一个 urls.py目的是为将不同应用的 urls.py文件分开防止命名产生干扰   在todoList的urls中按照项目的urls文">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Django入门项目02">
+<meta property="og:url" content="http://yoursite.com/2020/07/02/Django%E5%85%A5%E9%97%A8%E9%A1%B9%E7%9B%AE02/index.html">
+<meta property="og:site_name" content="zsddyd">
+<meta property="og:description" content="Django入门项目02 让我没想到的是不仅我没鸽子🕊，而且在上一篇文发布的半个小时不到我就开始着手第二篇了可能这就是，无聊吧? 本文含有 django内路由设置 模型模板视图用法   1. django内路由设置 在todoList，也就是你的应用文件夹下新建一个 urls.py目的是为将不同应用的 urls.py文件分开防止命名产生干扰   在todoList的urls中按照项目的urls文">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1.ax1x.com/2020/07/02/NHwz8I.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/07/02/Nbdd2t.png">
+<meta property="article:published_time" content="2020-07-01T16:07:17.000Z">
+<meta property="article:modified_time" content="2020-07-02T05:49:47.270Z">
+<meta property="article:author" content="zsddyd">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/07/02/NHwz8I.png">
+
+<link rel="canonical" href="http://yoursite.com/2020/07/02/Django%E5%85%A5%E9%97%A8%E9%A1%B9%E7%9B%AE02/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Django入门项目02 | zsddyd</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">zsddyd</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/02/Django%E5%85%A5%E9%97%A8%E9%A1%B9%E7%9B%AE02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zsddyd">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zsddyd">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Django入门项目02
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-07-02 00:07:17 / 修改时间：13:49:47" itemprop="dateCreated datePublished" datetime="2020-07-02T00:07:17+08:00">2020-07-02</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Django入门项目02"><a href="#Django入门项目02" class="headerlink" title="Django入门项目02"></a>Django入门项目02</h1><hr>
+<p>让我没想到的是不仅我没鸽子🕊，而且在上一篇文发布的半个小时不到我就开始着手第二篇了<br>可能这就是，无聊吧?</p>
+<h2 id="本文含有"><a href="#本文含有" class="headerlink" title="本文含有"></a>本文含有</h2><ul>
+<li><h4 id="django内路由设置"><a href="#django内路由设置" class="headerlink" title="django内路由设置"></a>django内路由设置</h4></li>
+<li><h4 id="模型模板视图用法"><a href="#模型模板视图用法" class="headerlink" title="模型模板视图用法"></a>模型模板视图用法</h4></li>
+</ul>
+<hr>
+<h3 id="1-django内路由设置"><a href="#1-django内路由设置" class="headerlink" title="1. django内路由设置"></a>1. django内路由设置</h3><ul>
+<li>在todoList，也就是你的应用文件夹下新建一个 <code>urls.py</code><br>目的是为将不同应用的 <code>urls.py</code>文件分开防止命名产生干扰  </li>
+<li>在todoList的urls中按照项目的urls文件这么写：  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.urls <span class="keyword">import</span> path</span><br><span class="line"><span class="keyword">from</span> . <span class="keyword">import</span> views</span><br><span class="line">urlpatterns = [</span><br><span class="line">    path(<span class="string">''</span>, views.index, name=<span class="string">'index'</span>), </span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<ul>
+<li>设置完todoList的 <code>urls.py</code>接下来设置 <code>mySite</code> 的 <code>urls.py</code>  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.contrib <span class="keyword">import</span> admin</span><br><span class="line"><span class="keyword">from</span> django.urls <span class="keyword">import</span> path,include   <span class="comment"># 注意这里比默认多了一个include</span></span><br><span class="line">urlpatterns = [</span><br><span class="line">    path(<span class="string">'admin/'</span>, admin.site.urls),</span><br><span class="line">    <span class="comment"># 这里使用include包括进来应用的urls.py文件</span></span><br><span class="line">    <span class="comment"># 为空是为了直接就进todoList应用，而不需要设置一个总页面</span></span><br><span class="line">    path(<span class="string">''</span>, include(<span class="string">'todoLIst.urls'</span>)),  </span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="2-视图设置"><a href="#2-视图设置" class="headerlink" title="2. 视图设置"></a>2. 视图设置</h3><ul>
+<li><p>这些做完了之后，只需要在应用 <code>todoList</code> 的 <code>views.py</code>中写一个 <code>index</code>函数即可:  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.http <span class="keyword">import</span> HttpResponse</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span><span class="params">(request)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> HttpResponse(<span class="string">"Hello,world~"</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>好了，接下来在终端输入 <code>python manage.py runserver</code><br>浏览器打开 <a href="http://127.0.0.1:8000/" target="_blank" rel="noopener">http://127.0.0.1:8000/</a> 来看一下<br>如果能看到 <code>Hello,world~</code>则没毛病</p>
+</li>
+</ul>
+<h3 id="3-模型使用"><a href="#3-模型使用" class="headerlink" title="3. 模型使用"></a>3. 模型使用</h3><ul>
+<li>我们所需要的 <code>todoList</code> ，需要有 <code>内容</code>，<code>创建时间</code> , <code>完成时间</code> , <code>是否完成</code> 这四个简单属性<br>在应用 <code>todoList</code> 下的 <code>models.py</code> 中进行定义：<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">from</span> django.db <span class="keyword">import</span> models</span><br><span class="line"><span class="keyword">from</span> django.utils <span class="keyword">import</span> timezone</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">todoEvent</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    <span class="comment"># 待办事件内容</span></span><br><span class="line">    todoEven_Text = models.CharField(max_length=<span class="number">400</span>)</span><br><span class="line">    <span class="comment"># 创建日期</span></span><br><span class="line">    create_Date = models.DateTimeField(<span class="string">'Event create'</span>)</span><br><span class="line">    <span class="comment"># 完成日期</span></span><br><span class="line">    finished_Date = models.DateTimeField(<span class="string">'Event finished'</span>)</span><br><span class="line">    <span class="comment"># 是否完成</span></span><br><span class="line">    isFinished = models.BooleanField(<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+接下来在命令行进行该模型的激活：<br><code>python manage.py makemigrations todoList</code><br><code>python manage.py migrate</code><br>好了数据库管理软件中就可以看到我们创建的 <code>todoEvent</code> 了  </li>
+</ul>
+<h3 id="4-视图使用"><a href="#4-视图使用" class="headerlink" title="4. 视图使用"></a>4. 视图使用</h3><ul>
+<li>设置完了模型，当然要对模型进行赋值啦<br>在应用 <code>todoList</code> 的 <code>views.py</code> 文件下将index函数改为如下：<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.http <span class="keyword">import</span> HttpResponse</span><br><span class="line"><span class="keyword">from</span> .models <span class="keyword">import</span> todoEvent</span><br><span class="line"><span class="keyword">from</span> django.utils <span class="keyword">import</span> timezone</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span><span class="params">(request)</span>:</span></span><br><span class="line">    tempEvent = todoEvent(todoEven_Text=<span class="string">"今天四点睡"</span>,create_Date=timezone.now(),finished_Date=timezone.now())</span><br><span class="line">    tempEvent.save()</span><br><span class="line">    <span class="keyword">return</span> HttpResponse(<span class="string">"Event added~"</span>)</span><br></pre></td></tr></table></figure>
+开启服务，进入 <code>http://127.0.0.1:8000/</code>显示 <code>Event added~</code><br>在数据库管理软件中看到数据如图：<br><img src="https://s1.ax1x.com/2020/07/02/NHwz8I.png" alt="NHwz8I.png"><br>视图测试完成<br>发现时间不对，是因为我们之前没有在项目 <code>settings.py</code> 内设置<br>将 <code>settings.py</code> 内 <code>USE_TZ</code> 改为 <code>False</code>即可</li>
+</ul>
+<h3 id="5-模板使用"><a href="#5-模板使用" class="headerlink" title="5. 模板使用"></a>5. 模板使用</h3><ul>
+<li>建立 <code>templates</code> 文件夹（如果IDE帮你建立的就不需要了）  <ul>
+<li>在 <code>templates</code> 文件夹下再建立 <code>todoList</code> 文件夹 （是为了防止重名，虽然现在只有一个应用，可是可能一会儿会有好多个应用呢？如果重名的话就需要重新更改，比较麻烦）</li>
+<li>建立一个 <code>index.html</code> 文件，其中代码如下：<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>index<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"container"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>待办清单<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h3</span>&gt;</span>待办列表<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">ul</span> <span class="attr">id</span>=<span class="string">"incomplete-tasks"</span>&gt;</span></span><br><span class="line">      &#123;# Code here #&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h3</span>&gt;</span>完成事项<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">ul</span> <span class="attr">id</span>=<span class="string">"completed-tasks"</span>&gt;</span></span><br><span class="line">      &#123;# Code here #&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+显示效果如图所示：<br><img src="https://s1.ax1x.com/2020/07/02/Nbdd2t.png" alt="Nbdd2t.png"><br>接下来只需要使用Django的API把数据库中内容拿出来即可</li>
+</ul>
+</li>
+<li>修改 <code>todoLIst</code> 的 <code>views.py</code> 文件内的 <code>index</code>函数如下：<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span><span class="params">(request)</span>:</span></span><br><span class="line">    tempEvent = todoEvent.objects.all()</span><br><span class="line">    template = loader.get_template(<span class="string">'todoLIst/index.html'</span>)</span><br><span class="line">    context = &#123;</span><br><span class="line">        <span class="string">'tempEvent'</span>: tempEvent,</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> HttpResponse(template.render(context, request))</span><br></pre></td></tr></table></figure>
+再将 <code>todoLIst/index.html</code> 内的两个代码区域替换为如下：<figure class="highlight django"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="template-tag">&#123;% <span class="name"><span class="name">if</span></span> tempEvent %&#125;</span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;<span class="name">ul</span>&gt;</span></span></span><br><span class="line"><span class="xml">        </span><span class="template-tag">&#123;% <span class="name"><span class="name">for</span></span> event <span class="keyword">in</span> tempEvent %&#125;</span></span><br><span class="line"><span class="xml">            <span class="tag">&lt;<span class="name">li</span>&gt;</span></span><span class="template-variable">&#123;&#123; event.todoEven_Text &#125;&#125;</span><span class="xml"><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line"><span class="xml">        </span><span class="template-tag">&#123;% <span class="name"><span class="name">endfor</span></span> %&#125;</span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span></span><br><span class="line"><span class="template-tag">&#123;% <span class="name"><span class="name">else</span></span> %&#125;</span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>待办列表为空，请添加！<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="template-tag">&#123;% <span class="name"><span class="name">endif</span></span> %&#125;</span></span><br></pre></td></tr></table></figure>
+运行项目，就可以显示内容了</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/07/01/Django%E5%85%A5%E9%97%A8%E9%A1%B9%E7%9B%AE01/" rel="prev" title="Django入门项目01">
+      <i class="fa fa-chevron-left"></i> Django入门项目01
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Django入门项目02"><span class="nav-number">1.</span> <span class="nav-text">Django入门项目02</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#本文含有"><span class="nav-number">1.1.</span> <span class="nav-text">本文含有</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#django内路由设置"><span class="nav-number">1.1.0.1.</span> <span class="nav-text">django内路由设置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模型模板视图用法"><span class="nav-number">1.1.0.2.</span> <span class="nav-text">模型模板视图用法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-django内路由设置"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. django内路由设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-视图设置"><span class="nav-number">1.1.2.</span> <span class="nav-text">2. 视图设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-模型使用"><span class="nav-number">1.1.3.</span> <span class="nav-text">3. 模型使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-视图使用"><span class="nav-number">1.1.4.</span> <span class="nav-text">4. 视图使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-模板使用"><span class="nav-number">1.1.5.</span> <span class="nav-text">5. 模板使用</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zsddyd</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zsddyd</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
